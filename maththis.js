@@ -6,18 +6,32 @@ function init(){
 	var userInputBox = document.getElementById("userInputBox");
 	var answerButton = document.getElementById("answerButton");
 	var startB = document.getElementById("startB");
-	
+	var list_ul = document.getElementById("list_ul");
 	
 	
 	//startB.onclick = startGame;
 	answerButton.onclick = checkAnswer;
-    
+    startB.onclick = startClicked;
+	
+	function startClicked(){
+		
+		var score = userInputBox.value;
+		
+		
+		var li = document.createElement("li");
+		li.innerHTML = score;
+		list_ul.appendChild(li);
+		saveScore(score);
+	}
+	
+	
 	displayBox.value = "";
 	userInputBox.value = "";
 	
 	console.log("initiated");
 
 	startGame();
+	loadScore();
 	
  function startGame(){
 	displayBox.value = "";
@@ -58,5 +72,39 @@ function init(){
 			
 		}	
 	startGame();
- }	
+ }
+
+ function saveScore(item){
+	 var scoreArray = getStoredArray("scorelist");
+	 scoreArray.push(item);
+	 localStorage.setItem("scorelist", JSON.stringify(scoreArray));
+ }
+ 
+ function loadScore() {
+	 var scoreArray = getSavedScore();
+	 if (scoreArray != null){
+		 
+		 for (var i = 0; i < scoreArray.length; i++){
+			 
+			var li = document.createElement("li");
+			li.innerHTML = scoreArray[i];
+			list_ul.appendChild(li);
+		 }
+	 } 
+ }
+ 
+ function getSavedScore() {
+	 return getStoredArray("scorelist");
+ }
+ 
+ function getStoredArray(key){
+	var scoreArray = localStorage.getItem(key);
+		if (scoreArray == null || scoreArray == ""){
+			scoreArray = new Array();
+		} else {
+			scoreArray = JSON.parse(scoreArray);
+		}
+		return scoreArray;
+ }
+ 
 }
